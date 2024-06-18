@@ -71,7 +71,7 @@ class WordController extends AbstractController
     #[Route('/{id}', name: 'app_word_delete', methods: ['POST'])]
     public function delete(Request $request, Word $word, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$word->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $word->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($word);
             $entityManager->flush();
         }

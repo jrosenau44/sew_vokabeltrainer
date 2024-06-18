@@ -4,7 +4,6 @@ namespace App\DataFixtures;
 
 use App\Entity\Translation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class TranslationFixtures extends Fixture
@@ -125,8 +124,6 @@ class TranslationFixtures extends Fixture
         $translation20->setArticle($this->getReference('die'));
 
         $manager->persist($translation20);
-
-
 
 
         $manager->flush();

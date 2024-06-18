@@ -30,9 +30,6 @@ class Article
     }
 
 
-
-
-
     public function getId(): ?int
     {
         return $this->id;
@@ -71,7 +68,6 @@ class Article
     public function removeTranslation(Translation $translation): static
     {
         if ($this->translations->removeElement($translation)) {
-            // set the owning side to null (unless already changed)
             if ($translation->getArticle() === $this) {
                 $translation->setArticle(null);
             }
@@ -79,11 +75,6 @@ class Article
 
         return $this;
     }
-
-
-
-
-
 
 
 }

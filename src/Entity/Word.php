@@ -114,15 +114,14 @@ class Word
         return $this;
     }
 
-       public function removeTranslation(Translation $translation): self
-{
-    if ($this->translations->removeElement($translation)) {
-        // set the owning side to null (unless already changed)
-        if ($translation->getWord() === $this) {
-            $translation->setWord(null);
+    public function removeTranslation(Translation $translation): self
+    {
+        if ($this->translations->removeElement($translation)) {
+            if ($translation->getWord() === $this) {
+                $translation->setWord(null);
+            }
         }
-    }
 
-    return $this;
-}
+        return $this;
+    }
 }

@@ -16,7 +16,6 @@ class Translation
     #[ORM\Column(length: 255)]
     private ?string $germanTranslation = null;
 
-    
 
     #[ORM\ManyToOne(inversedBy: 'translations')]
     #[ORM\JoinColumn(nullable: true)]

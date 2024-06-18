@@ -49,12 +49,22 @@ class WordRepository extends ServiceEntityRepository
             ->getResult();
 
         $wordsPerLevel = [];
-       foreach ($results as $result){
-           $wordsPerLevel[$result['progress']] = $result['count'];
-       }
+        foreach ($results as $result) {
+            $wordsPerLevel[$result['progress']] = $result['count'];
+        }
 
         return $wordsPerLevel;
 
     }
+
+    public function findAllExcept(?int $lastWordId): array
+    {
+        return $this->createQueryBuilder('w')
+            ->where('w.id != :lastWordId')
+            ->setParameter('lastWordId', $lastWordId)
+            ->getQuery()
+            ->getResult();
+    }
+
 
 }

@@ -6,6 +6,7 @@ use App\Repository\WordRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/home')]
@@ -26,13 +27,24 @@ class HomeController extends AbstractController
     }
 
     #[Route('/lernen', name: 'app_home_learn')]
-    public function learn(WordRepository $wordRepository): Response
+    public function learn(WordRepository $wordRepository, SessionInterface $session): Response
     {
+        $lastWordId = $session->get('lastWordId');
 
-        $words = $wordRepository->findAll();
+
+        $words = $wordRepository->findAllExcept($lastWordId);
+        if (empty($words)) {
+            $words = $wordRepository->findAll();
+            $index = array_rand($words);
+            $word = $words[$index];
+            $session->set('lastWordId', $word->getId());
+        }
+
+
         $index = array_rand($words);
         $word = $words[$index];
         $wordsPerLevel = $wordRepository->getWordsPerLevel();
+        $session->set('lastWordId', $word->getId());
         return $this->render('home/learn.html.twig', [
             'word' => $word,
             'wordsPerLevel' => $wordsPerLevel
@@ -46,9 +58,9 @@ class HomeController extends AbstractController
     {
         $word = $wordRepository->find($id);
         if (!$word) {
-            throw $this->createNotFoundException('kein wort für id: '.$id);
+            throw $this->createNotFoundException('kein wort für id: ' . $id);
         }
-        if($word->getProgress() < 5){
+        if ($word->getProgress() < 5) {
             $word->setProgress($word->getProgress() + 1);
 
         }
@@ -65,10 +77,9 @@ class HomeController extends AbstractController
 
         $word = $wordRepository->find($id);
         if (!$word) {
-            throw $this->createNotFoundException('kein wort für id: '.$id);
+            throw $this->createNotFoundException('kein wort für id: ' . $id);
         }
-        if ($word->getProgress() > 1){
-            echo '<script>alert("falsch")</script>';
+        if ($word->getProgress() > 1) {
             $word->setProgress($word->getProgress() - 1);
 
         }
