@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Word{% endblock %}
+
+{% block body %}
+    <h1>Vokabel</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ word.id }}</td>
+            </tr>
+            <tr>
+                <th>Englisches Vokabel</th>
+                <td>{{ word.englishWord }}</td>
+            </tr>
+            <tr>
+                <th>Englische Wortart</th>
+                <td>{{ word.englishDescription }}</td>
+            </tr>
+            <tr>
+                <th>Deutsche Wortart</th>
+                <td>{{ word.germanDescription }}</td>
+            </tr>
+            <tr>
+                <th>Level</th>
+                <td>{{ word.progress }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_word_index') }}">back to list</a>
+
+    <a href="{{ path('app_word_edit', {'id': word.id}) }}">edit</a>
+    <div id="german-translation">
+        <h4>Übersetzungen</h4>
+        {% for translation in word.getTranslations %}
+            {% if translation.getArticle != null %}
+                <p> {{ translation.getArticle.getName }} {{ translation.getGermanTranslation }}</p>
+            {% else %}
+                <p> {{ translation.getGermanTranslation }}</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    {{ include('word/_delete_form.html.twig') }}
+{% endblock %}

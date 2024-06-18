@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Article{% endblock %}
+
+{% block body %}
+    <h1>Neues Vokabel anlegen</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.englishWord) }}
+    {{ form_row(form.englishDescription) }}
+    {{ form_row(form.germanDescription) }}
+
+    <h3>Übersetzungen</h3>
+    <ul class="translations" data-prototype="{{ form_widget(form.translations.vars.prototype)|e('html_attr') }}">
+        {% for translation in form.translations %}
+            <li>{{ form_row(translation.germanTranslation) }}</li>
+        {% endfor %}
+    </ul>
+    <button type="button" onclick="addTranslation()" class="btn btn-primary">Übersetzung hinzufügen</button>
+
+    <button type="submit" class="btn btn-primary">Vokabel anlegen</button>
+    {{ form_end(form) }}
+
+    <script>
+        window.addTranslation = function() {
+            var $translations = $('.translations');
+            var index = $translations.find('li').length;
+
+            var prototype = $translations.data('prototype');
+            var newForm = prototype.replace(/__name__/g, index);
+
+            $translations.append('<li>' + newForm + '</li>');
+        };
+
+    </script>
+{% endblock %}

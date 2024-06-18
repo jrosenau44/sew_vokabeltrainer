@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Word index{% endblock %}
+
+{% block body %}
+    <h1>Vokabeliste</h1><h4>Aktuell {{ words|length }} Vokabeln.</h4>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>EnglishWord</th>
+            <th>EnglishDescription</th>
+            <th>Translation(s)</th>
+            <th>GermanDescription</th>
+            <th>Progress</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for word in words %}
+            <tr>
+                <td>{{ word.id }}</td>
+                <td>{{ word.englishWord }}</td>
+                <td>{{ word.englishDescription }}</td>
+                <td>{% for translation in word.getTranslations %}
+                        <a>{% if loop.last %}{{ translation.getGermanTranslation }} {% else %} {{ translation.getGermanTranslation }}, {% endif %}</a>{% endfor %}
+                </td>
+                <td>{{ word.germanDescription }}</td>
+                <td>{% if word.progress == 1 %}
+                        <img src="{{ asset('images/skull.png') }}" height="35px" width="35px"
+                             alt="level1"> {% elseif word.progress == 2 %}
+                        <img src="{{ asset('images/hurt.png') }}" height="35px" width="35px"
+                             alt="level2"> {% elseif word.progress == 3 %}  <img src="{{ asset('images/sad.png') }}"
+                                                                                 height="35px"
+                                                                                 width="35px"
+                                                                                 alt="level3">{% elseif word.progress == 4 %}
+                        <img
+                                src="{{ asset('images/smiling.png') }}" height="35px" width="35px"
+                                alt="level4"> {% elseif word.progress == 5 %}  <img
+                            src="{{ asset('images/clapping.png') }}" height="35px"
+                            width="35px" alt="level5"> {% endif %}</td>
+                <td>
+                    <a href="{{ path('app_word_show', {'id': word.id}) }}">show</a>
+                    <a href="{{ path('app_word_edit', {'id': word.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">keine Vokabeln vorhanden</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_word_new') }}">Neues Vokabel anlegen</a>
+{% endblock %}
